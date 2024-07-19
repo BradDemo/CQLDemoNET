@@ -1,0 +1,41 @@
+name: .NET Core
+
+on: [push]
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: 'csharp'
+          build-mode: 'none'
+
+      - name: Perform CodeQL Analysis
+        id: codeql_analyze
+        uses: github/codeql-action/analyze@v3
+        with:
+          upload: 'never'
+          output: ./codeql-results
+
+      # (Optional) Upload SARIF file as an artifact
+      - name: Upload SARIF file
+        uses: actions/upload-artifact@v3
+        with:
+          name: codeql-sarif
+          path: ./codeql-results/**/*.sarif
+
+      # Example step to process the SARIF file
+      # This is a placeholder for your actual processing script
+      - name: SARIF Quality Gate Check
+        uses: maurirohling/sarif-quality-gate-action@main
+        with:
+          sarif-file-path: ./codeql-results/csharp.sarif
+          max-errors: 1
+          max-warnings: 5
+
