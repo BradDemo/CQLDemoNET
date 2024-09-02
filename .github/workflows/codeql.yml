@@ -33,4 +33,3 @@ jobs:
     - name: Perform CodeQL Analysis
       id: codeql_analyze
       uses: github/codeql-action/analyze@v3
-        build-mode:
